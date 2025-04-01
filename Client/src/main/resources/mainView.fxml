@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.MainView">
+   <children>
+      <DatePicker fx:id="dateBox" layoutX="371.0" layoutY="34.0" prefHeight="26.0" prefWidth="136.0" />
+      <ComboBox fx:id="originBox" layoutX="47.0" layoutY="34.0" prefHeight="26.0" prefWidth="128.0" />
+      <ComboBox fx:id="departureBox" layoutX="207.0" layoutY="33.0" prefHeight="26.0" prefWidth="128.0" />
+      <Button fx:id="searchButton" layoutX="522.0" layoutY="34.0" mnemonicParsing="false" onAction="#handleSearch" text="Search" />
+      <TableView fx:id="mainTable" layoutX="54.0" layoutY="100.0" prefHeight="259.0" prefWidth="507.0">
+        <columns>
+          <TableColumn fx:id="originColumn" prefWidth="94.20001602172852" text="origin" />
+          <TableColumn fx:id="departureColumn" prefWidth="86.80001831054688" text="departure" />
+            <TableColumn fx:id="timeColumn" prefWidth="134.80001831054688" text="time" />
+            <TableColumn fx:id="airportColumn" prefWidth="97.19998168945312" text="airport" />
+            <TableColumn fx:id="seatsColumn" prefWidth="94.19998168945312" text="avaible seats" />
+        </columns>
+      </TableView>
+      <Button fx:id="logOutButton" layoutX="478.0" layoutY="359.0" mnemonicParsing="false" onAction="#handleLogOut" prefHeight="26.0" prefWidth="80.0" text="Log out" />
+      <Label layoutX="47.0" layoutY="14.0" text="From:" />
+      <Label layoutX="207.0" layoutY="14.0" text="To:" />
+      <Label layoutX="371.0" layoutY="14.0" text="Date" />
+   </children>
+</AnchorPane>

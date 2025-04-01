@@ -1,0 +1,5 @@
+package org.example.clientfx;
+
+public enum ResponseType {
+    OK,ERROR,NEW_TICKET,RECEIVE_ORIGIN,RECEIVE_DESTINATION,RECEIVE_SEARCH,RECEIVE_FLIGHTS,NOT_FOUND
+}

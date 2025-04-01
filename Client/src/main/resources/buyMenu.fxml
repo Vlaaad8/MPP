@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.BuyMenu">
+   <children>
+       <TableView fx:id="mainTable" layoutX="54.0" layoutY="100.0" prefHeight="259.0" prefWidth="507.0">
+           <columns>
+               <TableColumn fx:id="originColumn" prefWidth="94.20001602172852" text="origin" />
+               <TableColumn fx:id="departureColumn" prefWidth="86.80001831054688" text="departure" />
+               <TableColumn fx:id="timeColumn" prefWidth="143.80001831054688" text="time" />
+               <TableColumn fx:id="airportColumn" prefWidth="66.60000610351562" text="airport" />
+               <TableColumn fx:id="seatsColumn" prefWidth="114.5999755859375" text="avaible seats" />
+           </columns>
+       </TableView>
+      <Button fx:id="buyButton" layoutX="462.0" layoutY="47.0" mnemonicParsing="false" onAction="#handleBuy" prefHeight="26.0" prefWidth="81.0" text="Buy" />
+      <Spinner fx:id="numberBox" layoutX="54.0" layoutY="47.0" />
+      <TextField fx:id="buyerText" layoutX="257.0" layoutY="47.0" />
+      <Label layoutX="54.0" layoutY="30.0" text="Number of tickets:" />
+      <Label layoutX="257.0" layoutY="30.0" text="Person names:" />
+   </children>
+</AnchorPane>
