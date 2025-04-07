@@ -1,5 +1,6 @@
 package org.example;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.clientfx.Flight;
+import org.example.clientfx.IObserver;
 import org.example.clientfx.IServices;
 import org.example.clientfx.Ticket;
 
@@ -17,7 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
-public class BuyMenu {
+public class BuyMenu implements IObserver {
     @FXML
     public TableView<Flight> mainTable;
     @FXML
@@ -28,9 +30,13 @@ public class BuyMenu {
     public TableColumn<Flight, String> timeColumn;
     @FXML
     public TableColumn<Flight, String> airportColumn;
+    @FXML
     public TableColumn<Flight, Integer> seatsColumn;
+    @FXML
     public Button buyButton;
+    @FXML
     public Spinner<Integer> numberBox;
+    @FXML
     public TextField buyerText;
     ObservableList<Flight> model = FXCollections.observableArrayList();
 
@@ -39,8 +45,10 @@ public class BuyMenu {
     private String departure;
     private IServices service;
 
-    public void setService(IServices service, Date date, String origin, String departure) {
+    public void setService(IServices service) {
         this.service = service;
+    }
+    public void setData(Date date, String origin, String departure){
         this.date = date;
         this.origin = origin;
         this.departure = departure;
@@ -82,7 +90,18 @@ public class BuyMenu {
         Ticket ticket = new Ticket(buyers, flight, numberOfTickets);
         ticket.setId(0);
         service.addTicket(ticket);
-        initMain();
 
+    }
+
+    @Override
+    public void newTicketBought(Ticket ticket) throws Exception {
+//        Platform.runLater(() -> {
+//            try {
+//                initMain();
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//        });
     }
 }

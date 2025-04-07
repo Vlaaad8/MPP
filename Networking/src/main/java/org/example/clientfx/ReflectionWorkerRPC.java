@@ -94,7 +94,7 @@ public class ReflectionWorkerRPC implements Runnable, IObserver {
         Employee employee = DTOUtils.getFromDTO(employeeDTO);
         try {
             System.out.println("Angajatul pe care l-am primit are datele "+employee.getUser()+" "+employee.getPassword());
-            Employee employee1= server.login(employee);
+            Employee employee1= server.login(employee,this);
             if(employee1.getId()>0) {
                 return okResponse;
             }
@@ -117,8 +117,10 @@ public class ReflectionWorkerRPC implements Runnable, IObserver {
             allFlights.forEach(flight -> {
                 flights.add(new FlightDTO(flight.getId(), flight.getOrigin(), flight.getDeparture(), flight.getDayTime(), flight.getAvailableSeats(), flight.getAirport()));
             });
+            System.out.println(flights.size());
             return (new Response.Builder()).type(ResponseType.RECEIVE_FLIGHTS).data(flights).build();
         } catch (Exception e) {
+            System.out.println("Error in get flights: " + e.getMessage());
             return new Response.Builder().type(ResponseType.ERROR).data(e.getMessage()).build();
         }
     }
@@ -168,7 +170,10 @@ public class ReflectionWorkerRPC implements Runnable, IObserver {
 
     @Override
     public void newTicketBought(Ticket ticket) throws Exception {
-
+        TicketDTO ticketDTO = DTOUtils.getDTO(ticket);
+        Response response = (new Response.Builder()).type(ResponseType.NEW_TICKET).data(ticketDTO).build();
+        sendResponse(response);
+        System.out.println("Am trimis un update client");
     }
 }
 

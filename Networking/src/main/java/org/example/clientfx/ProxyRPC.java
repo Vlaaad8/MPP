@@ -55,9 +55,14 @@ public class ProxyRPC implements IServices {
 
     private void handleUpdate(Response response) {
         if (response.type() == ResponseType.NEW_TICKET) {
-            if (client != null) {
-                //client.ticketAdded();
+            TicketDTO ticketDTO = (TicketDTO) response.data();
+            Ticket ticket = DTOUtils.getFromDTO(ticketDTO);
+            try {
+                this.client.newTicketBought(ticket);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
+
         }
     }
 
@@ -107,17 +112,20 @@ public class ProxyRPC implements IServices {
     }
 
     @Override
-    public Employee login(Employee employee) {
+    public Employee login(Employee employee,IObserver client) {
         try {
             this.initializeConnection();
             EmployeeDTO employeeDTO = DTOUtils.getDTO(employee);
+            System.out.println("Am intrat in login");
             Request request = new Request.Builder()
                     .type(RequestType.LOGIN)
                     .data(employeeDTO)
                     .build();
             this.sendRequest(request);
+            System.out.println("Am trimis requestul de login");
             Response response = this.readResponse();
             if (response.type() == ResponseType.OK) {
+                this.client= client;
                 return employee;
             }
             if (response.type() == ResponseType.ERROR) {

@@ -2,6 +2,8 @@ package org.example;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.LoadException;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -38,20 +40,21 @@ public class StartClientRPC extends Application {
         System.out.println("Client running on"+" " + serverIP + ":" + serverPort);
         IServices server = new ProxyRPC(serverIP, serverPort);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/logView.fxml"));
-        AnchorPane root = null;
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Yahoo Messenger");
-        LogView mainMenuView = loader.getController();
-        mainMenuView.setService(stage, server);
-        stage.setHeight(472);
-        stage.setWidth(600);
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("logView.fxml"));
+        Parent root=loader.load();
+        LogView logView = loader.<LogView>getController();
+        logView.setService(server);
+
+        FXMLLoader cloader = new FXMLLoader(getClass().getClassLoader().getResource("mainView.fxml"));
+        Parent croot=cloader.load();
+        MainView mainMenuView = cloader.<MainView>getController();
+        mainMenuView.setService(server);
+
+        logView.setMainMenuView(mainMenuView);
+        logView.setParent(croot);
+
+        stage.setTitle("Login");
+        stage.setScene(new Scene(root, 600, 400));
         stage.show();
     }
 }
