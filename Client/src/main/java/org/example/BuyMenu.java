@@ -11,8 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.clientfx.Flight;
-import org.example.clientfx.IObserver;
-import org.example.clientfx.IServices;
+
 import org.example.clientfx.Ticket;
 import org.example.clientfx.grpc.BookingServiceGrpc;
 import org.example.clientfx.grpc.NotificationServiceGrpc;
@@ -24,7 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
-public class BuyMenu implements IObserver {
+public class BuyMenu {
     @FXML
     public TableView<Flight> mainTable;
     @FXML
@@ -138,17 +137,5 @@ public class BuyMenu implements IObserver {
         buyerText.clear();
 
 
-    }
-
-    @Override
-    public void newTicketBought(Ticket ticket) throws Exception {
-//        Platform.runLater(() -> {
-//            try {
-//                initMain();
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//        });
     }
 }

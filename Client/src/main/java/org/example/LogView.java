@@ -11,15 +11,13 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.example.clientfx.Employee;
-import org.example.clientfx.IServices;
 
 import org.example.clientfx.grpc.BookingServiceGrpc;
 import org.example.clientfx.grpc.NotificationServiceGrpc;
 import org.example.clientfx.grpc.Service;
-import org.mindrot.jbcrypt.BCrypt;
-import org.mindrot.jbcrypt.BCrypt;
 
-import java.io.Console;
+
+
 import java.io.IOException;
 
 public class LogView {
