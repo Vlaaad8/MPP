@@ -13,6 +13,13 @@ import javafx.stage.Stage;
 import org.example.clientfx.Employee;
 import org.example.clientfx.IServices;
 
+import org.example.clientfx.grpc.BookingServiceGrpc;
+import org.example.clientfx.grpc.NotificationServiceGrpc;
+import org.example.clientfx.grpc.Service;
+import org.mindrot.jbcrypt.BCrypt;
+import org.mindrot.jbcrypt.BCrypt;
+
+import java.io.Console;
 import java.io.IOException;
 
 public class LogView {
@@ -28,10 +35,13 @@ public class LogView {
     private MainView mainMenuView;
     private Parent mainChatParent;
 
-    private IServices service;
+    private BookingServiceGrpc.BookingServiceBlockingStub service;
+    private NotificationServiceGrpc.NotificationServiceStub observer;
 
-    public void setService(IServices service) {
-        this.service = service;
+    public void setStubs(BookingServiceGrpc.BookingServiceBlockingStub bookingStub,
+                         NotificationServiceGrpc.NotificationServiceStub notificationStub) {
+        this.service = bookingStub;
+        this.observer = notificationStub;
     }
 
     public void setMainMenuView(MainView mainMenuView) {
@@ -44,22 +54,21 @@ public class LogView {
 
     public void handleLogin(ActionEvent actionEvent) throws IOException {
         String username = userField.getText();
-        String password = passwordField.getText();
+        String passwordNoCrypt = passwordField.getText();
         userField.clear();
         passwordField.clear();
 
         try {
-            Employee employee = new Employee(username, password, "", "");
+            Employee employee = new Employee(username, passwordNoCrypt, "", "");
             employee.setId(0);
-
-
-            Employee loggedInEmployee = this.service.login(employee, mainMenuView);
-            System.out.println("LogView-Client: Logged in employee: " + loggedInEmployee.getId());
-            if (loggedInEmployee.getId() != null) {
+            var a= Service.EmployeeDTO.newBuilder().setId(0).setUser(employee.getUser()).setPassword(employee.getPassword()).setLastName("").setFirstName("").build();
+            Service.DefaultResponse loggedInEmployee = service.login(a);
+            //System.out.println("LogView-Client: Logged in employee: " + loggedInEmployee.getId());
+            if (loggedInEmployee.getSuccess()) {
                 Stage stage = new Stage();
                 stage.setTitle("Chat Window");
                 stage.setScene(new Scene(mainChatParent));
-                mainMenuView.setEmployee(loggedInEmployee);
+                mainMenuView.setEmployee(employee);
                 System.out.println(mainChatParent.toString());
                 stage.show();
                 ((Node) (actionEvent.getSource())).getScene().getWindow().hide();

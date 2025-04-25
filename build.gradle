@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.google.protobuf' version '0.9.4'
 }
 
 group 'org.example'
@@ -9,19 +10,34 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
+    implementation 'io.grpc:grpc-netty-shaded:1.64.0'
+    implementation 'io.grpc:grpc-protobuf:1.64.0'
+    implementation 'io.grpc:grpc-stub:1.64.0'
 
+    compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necesar pentru Java 8
 
-    // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
-    //runtimeOnly group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.5.2'
-    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
-    //implementation("org.apache.logging.log4j:log4j-core:2.24.3")
-// https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
-    //implementation("org.apache.logging.log4j:log4j-api:2.24.3")
-
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
 }
 
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.25.2"
+    }
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.64.0'
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.plugins {
+                grpc {}
+            }
+        }
+    }
+}
 
 test {
     useJUnitPlatform()

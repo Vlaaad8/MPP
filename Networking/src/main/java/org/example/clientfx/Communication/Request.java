@@ -1,4 +1,4 @@
-package org.example.clientfx;
+package org.example.clientfx.Communication;
 
 import java.io.Serializable;
 

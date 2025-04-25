@@ -1,0 +1,77 @@
+syntax = "proto3";
+package booking;
+
+import "google/protobuf/empty.proto";
+
+option java_package = "org.example.clientfx.grpc";
+option csharp_namespace = "Org.Example.ClientFx.Grpc";
+
+message EmployeeDTO{
+  int32 id = 1;
+  string user = 2;
+  string password = 3;
+  string firstName = 4;
+  string lastName = 5;
+}
+
+message FlightDTO{
+  int32 id = 1;
+  string origin = 2;
+  string destination = 3;
+  int32 availableSeats = 4;
+  string airport = 5;
+  string date = 6;
+}
+
+message TicketDTO{
+  int32 id = 1;
+  FlightDTO flight = 2;
+  int32 numberOfTickets = 3;
+  string buyers = 4;
+}
+
+message FlightList{
+  repeated FlightDTO flights = 1;
+}
+message CityList{
+  repeated string cities = 1;
+}
+
+message CityResponse{
+  oneof result{
+    CityList city = 1;
+    string error = 2;
+  }
+}
+
+message FlightResponse{
+  oneof result{
+    FlightList flight=1;
+    string error=2;
+  }
+}
+
+message DefaultResponse{
+  oneof result{
+    bool success = 1;
+    string error = 2;
+  }
+}
+
+message Notification{
+  string message=1;
+}
+
+
+service BookingService{
+  rpc AddTicket(TicketDTO) returns (DefaultResponse);
+  rpc GetAllFlights(google.protobuf.Empty) returns (FlightResponse);
+  rpc GetOrigin(google.protobuf.Empty) returns (CityResponse);
+  rpc GetDestination(google.protobuf.Empty) returns (CityResponse);
+  rpc SearchFlight(FlightDTO) returns(FlightResponse);
+  rpc Login(EmployeeDTO) returns (DefaultResponse);
+}
+
+service NotificationService{
+  rpc NewTicketBought(google.protobuf.Empty) returns (stream Notification);
+}

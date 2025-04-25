@@ -2,15 +2,16 @@ package org.example;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.LoadException;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.example.clientfx.IServices;
-import org.example.clientfx.ProxyRPC;
+import org.example.clientfx.Communication.ProxyRPC;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+import org.example.clientfx.grpc.BookingServiceGrpc;
+import org.example.clientfx.grpc.NotificationServiceGrpc;
 
-import java.io.IOException;
 import java.util.Properties;
 
 public class StartClientRPC extends Application {
@@ -37,18 +38,24 @@ public class StartClientRPC extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        ManagedChannel channel=ManagedChannelBuilder.forAddress(serverIP, serverPort).usePlaintext().build();
         System.out.println("Client running on"+" " + serverIP + ":" + serverPort);
-        IServices server = new ProxyRPC(serverIP, serverPort);
+
+        BookingServiceGrpc.BookingServiceBlockingStub bookingService = BookingServiceGrpc.newBlockingStub(channel);
+        NotificationServiceGrpc.NotificationServiceStub notificationService = NotificationServiceGrpc.newStub(channel);
+
+
 
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("logView.fxml"));
         Parent root=loader.load();
         LogView logView = loader.<LogView>getController();
-        logView.setService(server);
+        logView.setStubs(bookingService,notificationService);
 
         FXMLLoader cloader = new FXMLLoader(getClass().getClassLoader().getResource("mainView.fxml"));
         Parent croot=cloader.load();
         MainView mainMenuView = cloader.<MainView>getController();
-        mainMenuView.setService(server);
+        mainMenuView.setStubs(bookingService,notificationService);
 
         logView.setMainMenuView(mainMenuView);
         logView.setParent(croot);

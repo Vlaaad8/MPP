@@ -1,5 +1,7 @@
 package org.example.clientfx;
 
+import org.example.clientfx.Communication.ReflectionWorkerRPC;
+
 import java.net.Socket;
 
 public class ConcurrentServerRPC extends AbstractConcurrentServer{

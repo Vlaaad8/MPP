@@ -12,6 +12,9 @@ import org.example.clientfx.Flight;
 import org.example.clientfx.IObserver;
 import org.example.clientfx.IServices;
 import org.example.clientfx.Ticket;
+import org.example.clientfx.grpc.BookingServiceGrpc;
+import org.example.clientfx.grpc.NotificationServiceGrpc;
+import org.example.clientfx.grpc.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -43,10 +46,13 @@ public class BuyMenu implements IObserver {
     private Date date;
     private String origin;
     private String departure;
-    private IServices service;
+    private BookingServiceGrpc.BookingServiceBlockingStub service;
+    private NotificationServiceGrpc.NotificationServiceStub observer;
 
-    public void setService(IServices service) {
-        this.service = service;
+    public void setStubs(BookingServiceGrpc.BookingServiceBlockingStub bookingStub,
+                         NotificationServiceGrpc.NotificationServiceStub notificationStub) {
+        this.service = bookingStub;
+        this.observer = notificationStub;
     }
     public void setData(Date date, String origin, String departure){
         this.date = date;
@@ -78,7 +84,8 @@ public class BuyMenu implements IObserver {
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime());
         flight.setId(0);
-        List<Flight> flights = service.searchFlight(flight);
+        Service.FlightResponse flightResponse= service.searchFlight(ClientUtils.getDTO(flight));
+        List<Flight> flights=ClientUtils.getFlightList(flightResponse);
         model.setAll(flights);
     }
 
@@ -89,7 +96,9 @@ public class BuyMenu implements IObserver {
         String buyers = buyerText.getText();
         Ticket ticket = new Ticket(buyers, flight, numberOfTickets);
         ticket.setId(0);
-        service.addTicket(ticket);
+        service.addTicket(ClientUtils.getDTO(ticket));
+        buyerText.clear();
+
 
     }
 

@@ -1,5 +1,6 @@
-package org.example.clientfx;
+package org.example.clientfx.Communication;
 
+import org.example.clientfx.*;
 import org.example.clientfx.DTO.DTOUtils;
 import org.example.clientfx.DTO.EmployeeDTO;
 import org.example.clientfx.DTO.FlightDTO;
@@ -8,9 +9,7 @@ import org.example.clientfx.DTO.TicketDTO;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Reader;
 import java.net.Socket;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
